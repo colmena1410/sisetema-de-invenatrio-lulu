@@ -18,7 +18,7 @@ public class Dashboard extends javax.swing.JFrame {
         iniciarReloj(); // Activa el reloj
         this.setLocationRelativeTo(null);
         
-        // --- ESTILOS PARA EL RELOJ ---
+        //  RELOJ 
         lblreloj.setFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 18)); // Letra negrita tamaño 18 (más grande)
         lblreloj.setForeground(new java.awt.Color(100, 30, 60)); // Color vino tinto elegante que combina con el rosado
         lblreloj.setHorizontalAlignment(javax.swing.SwingConstants.CENTER); // Centrado
@@ -243,14 +243,13 @@ public class Dashboard extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
-        // 1. Crear el objeto de la ventana de Ventas
+        
     ventas ventanaVentas = new ventas();
     
-    // 2. Hacerla visible
+    
     ventanaVentas.setVisible(true);
     
-    // (Opcional) Si quieres que el Dashboard principal se cierre al abrir ventas:
-    // this.dispose();
+    
     }//GEN-LAST:event_jButton5ActionPerformed
 
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
@@ -278,7 +277,7 @@ public class Dashboard extends javax.swing.JFrame {
 ventanaLogin.setVisible(true);
 ventanaLogin.setLocationRelativeTo(null); // Centra la ventana en la pantalla
 
-// 2. Cerrar y destruir la ventana actual del Dashboard
+
 this.dispose();
     }//GEN-LAST:event_jToggleButton1ActionPerformed
 

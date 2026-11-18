@@ -1,18 +1,7 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
- */
 package inventario;
 
-/**
- *
- * @author Cesar
- */
 public class Login extends javax.swing.JFrame {
 
-    /**
-     * Creates new form Login
-     */
     public Login() {
         initComponents();
         this.setLocationRelativeTo(null);
@@ -124,54 +113,47 @@ public class Login extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-String usuario = jTextField1.getText().trim();
-    String password = new String(jPasswordField2.getPassword()).trim();
+        String usuario = jTextField1.getText().trim();
+        String password = new String(jPasswordField2.getPassword()).trim();
 
-    if (usuario.isEmpty() || password.isEmpty()) {
-        javax.swing.JOptionPane.showMessageDialog(this, "Por favor ingrese usuario y contraseña.");
-        return;
-    }
-
-    String sql = "SELECT rol FROM usuarios WHERE usuario = ? AND contrasena = ?";
-
-    try (java.sql.Connection conn = Conexion.conectar();
-         java.sql.PreparedStatement pstmt = conn.prepareStatement(sql)) {
-
-        pstmt.setString(1, usuario);
-        pstmt.setString(2, password);
-
-        try (java.sql.ResultSet rs = pstmt.executeQuery()) {
-            if (rs.next()) {
-                // Pasamos a minúsculas y limpiamos espacios para evitar errores de formato
-                String rol = rs.getString("rol").trim().toLowerCase();
-
-                // Verificamos por palabras clave para mayor flexibilidad
-                if (rol.contains("admin")) {
-                    // Acceso completo al sistema (Dashboard)
-                    Dashboard adminDashboard = new Dashboard();
-                    adminDashboard.setVisible(true);
-                    this.dispose();
-                } else if (rol.contains("vend") || rol.contains("cajer")) {
-                    // Acceso exclusivo a la ventana de Ventas
-                    ventas ventasVentana = new ventas(); 
-                    ventasVentana.setVisible(true);
-                    this.dispose();
-                } else {
-                    javax.swing.JOptionPane.showMessageDialog(this, "Rol no reconocido en el sistema: [" + rol + "]");
-                }
-
-            } else {
-                javax.swing.JOptionPane.showMessageDialog(this, "Usuario o contraseña incorrectos.");
-            }
+        if (usuario.isEmpty() || password.isEmpty()) {
+            javax.swing.JOptionPane.showMessageDialog(this, "Por favor ingrese usuario y contraseña.");
+            return;
         }
-    } catch (java.sql.SQLException e) {
-        javax.swing.JOptionPane.showMessageDialog(this, "Error de base de datos: " + e.getMessage());
-    }
+
+        String sql = "SELECT rol FROM usuarios WHERE usuario = ? AND contrasena = ?";
+
+        try (java.sql.Connection conn = Conexion.conectar();
+             java.sql.PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setString(1, usuario);
+            pstmt.setString(2, password);
+
+            try (java.sql.ResultSet rs = pstmt.executeQuery()) {
+                if (rs.next()) {
+                    String rol = rs.getString("rol").trim().toLowerCase();
+
+                    if (rol.contains("admin")) {
+                        Dashboard adminDashboard = new Dashboard();
+                        adminDashboard.setVisible(true);
+                        this.dispose();
+                    } else if (rol.contains("vend") || rol.contains("cajer")) {
+                        ventas ventasVentana = new ventas(); 
+                        ventasVentana.setVisible(true);
+                        this.dispose();
+                    } else {
+                        javax.swing.JOptionPane.showMessageDialog(this, "Rol no reconocido en el sistema: [" + rol + "]");
+                    }
+
+                } else {
+                    javax.swing.JOptionPane.showMessageDialog(this, "Usuario o contraseña incorrectos.");
+                }
+            }
+        } catch (java.sql.SQLException e) {
+            javax.swing.JOptionPane.showMessageDialog(this, "Error de base de datos: " + e.getMessage());
+        }
     }//GEN-LAST:event_jButton1ActionPerformed
 
-    /**
-     * @param args the command line arguments
-     */
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">

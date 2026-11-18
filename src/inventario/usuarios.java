@@ -1,54 +1,41 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
- */
 package inventario;
 
-/**
- *
- * @author Cesar
- */
 public class usuarios extends javax.swing.JFrame {
-public static javax.swing.table.DefaultTableModel modeloUsuariosGlobal = new javax.swing.table.DefaultTableModel(
-    new Object [][] {},
-    new String [] { "ID", "Usuario", "Contraseña" }
-);
-    /**
-     * Creates new form usuarios
-     */
+    public static javax.swing.table.DefaultTableModel modeloUsuariosGlobal = new javax.swing.table.DefaultTableModel(
+        new Object [][] {},
+        new String [] { "ID", "Usuario", "Contraseña" }
+    );
+
     public usuarios() {
-        
         initComponents();
         this.setLocationRelativeTo(null);
         jTable1.setModel(modeloUsuariosGlobal);
         jTable1.setModel(agregarusuario.modeloUsuariosGlobal);
         cargarUsuariosEnTabla();
     }
-public void cargarUsuariosEnTabla() {
-    // Obtenemos el modelo de tu JTable (asegúrate de que tu tabla se llame jTable1)
-    javax.swing.table.DefaultTableModel modelo = (javax.swing.table.DefaultTableModel) jTable1.getModel();
-    modelo.setRowCount(0); // Limpia la tabla antes de cargar para evitar duplicados
-    
-    String sql = "SELECT id, usuario, rol FROM usuarios";
-    
-    try (java.sql.Connection conn = Conexion.conectar();
-         java.sql.Statement stmt = conn.createStatement();
-         java.sql.ResultSet rs = stmt.executeQuery(sql)) {
-         
-        while (rs.next()) {
-            modelo.addRow(new Object[]{
-                rs.getInt("id"),
-                rs.getString("usuario"),
-                "********", // Ocultamos la contraseña por seguridad en la tabla
-                rs.getString("rol")
-            });
-        }
-    } catch (java.sql.SQLException e) {
-        javax.swing.JOptionPane.showMessageDialog(this, "Error al cargar usuarios: " + e.getMessage());
-    }
-}
-       
 
+    public void cargarUsuariosEnTabla() {
+        javax.swing.table.DefaultTableModel modelo = (javax.swing.table.DefaultTableModel) jTable1.getModel();
+        modelo.setRowCount(0);
+        
+        String sql = "SELECT id, usuario, rol FROM usuarios";
+        
+        try (java.sql.Connection conn = Conexion.conectar();
+             java.sql.Statement stmt = conn.createStatement();
+             java.sql.ResultSet rs = stmt.executeQuery(sql)) {
+             
+            while (rs.next()) {
+                modelo.addRow(new Object[]{
+                    rs.getInt("id"),
+                    rs.getString("usuario"),
+                    "********",
+                    rs.getString("rol")
+                });
+            }
+        } catch (java.sql.SQLException e) {
+            javax.swing.JOptionPane.showMessageDialog(this, "Error al cargar usuarios: " + e.getMessage());
+        }
+    }
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -197,138 +184,118 @@ public void cargarUsuariosEnTabla() {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-agregarusuario ventana = new agregarusuario();
-    ventana.setVisible(true);
+        agregarusuario ventana = new agregarusuario();
+        ventana.setVisible(true);
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
-   // 1. Verificar si hay una fila seleccionada
-int filaSeleccionada = jTable1.getSelectedRow();
+        int filaSeleccionada = jTable1.getSelectedRow();
 
-if (filaSeleccionada == -1) {
-    javax.swing.JOptionPane.showMessageDialog(this, "Por favor, seleccione un usuario de la tabla para actualizar.", "Advertencia", javax.swing.JOptionPane.WARNING_MESSAGE);
-    return;
-}
+        if (filaSeleccionada == -1) {
+            javax.swing.JOptionPane.showMessageDialog(this, "Por favor, seleccione un usuario de la tabla para actualizar.", "Advertencia", javax.swing.JOptionPane.WARNING_MESSAGE);
+            return;
+        }
 
-// 2. Obtener los datos actuales de la fila seleccionada (usando jTable1 o el modelo global)
-Object idActual = jTable1.getValueAt(filaSeleccionada, 0);
-String usuarioActual = jTable1.getValueAt(filaSeleccionada, 1).toString();
-// Nota: Validamos el índice de la columna del rol según tu estructura real (si está en la 2 o 3)
-String rolActual = jTable1.getValueAt(filaSeleccionada, 3).toString();
+        Object idActual = jTable1.getValueAt(filaSeleccionada, 0);
+        String usuarioActual = jTable1.getValueAt(filaSeleccionada, 1).toString();
+        String rolActual = jTable1.getValueAt(filaSeleccionada, 3).toString();
 
-// 3. Mostrar JOptionPane para editar el nombre de usuario
-String nuevoUsuario = javax.swing.JOptionPane.showInputDialog(this, "Modificar Nombre de Usuario:", usuarioActual);
-if (nuevoUsuario == null || nuevoUsuario.trim().isEmpty()) {
-    return; // Si cancela o lo deja vacío, no hace nada
-}
+        String nuevoUsuario = javax.swing.JOptionPane.showInputDialog(this, "Modificar Nombre de Usuario:", usuarioActual);
+        if (nuevoUsuario == null || nuevoUsuario.trim().isEmpty()) {
+            return;
+        }
 
-// 4. Mostrar JOptionPane para editar la contraseña
-String nuevaContraseña = javax.swing.JOptionPane.showInputDialog(this, "Modificar Contraseña (o dejar ***):", "***");
-if (nuevaContraseña == null) {
-    return;
-}
+        String nuevaContraseña = javax.swing.JOptionPane.showInputDialog(this, "Modificar Contraseña (o dejar ***):", "***");
+        if (nuevaContraseña == null) {
+            return;
+        }
 
-// 5. Opciones para el rol usando un ComboBox dentro de un JOptionPane
-Object[] roles = {"ADMINISTRADOR", "VENDEDOR"};
-Object nuevoRol = javax.swing.JOptionPane.showInputDialog(
-    this, 
-    "Seleccione el nuevo rol:", 
-    "Modificar Rol", 
-    javax.swing.JOptionPane.QUESTION_MESSAGE, 
-    null, 
-    roles, 
-    rolActual
-);
+        Object[] roles = {"ADMINISTRADOR", "VENDEDOR"};
+        Object nuevoRol = javax.swing.JOptionPane.showInputDialog(
+            this, 
+            "Seleccione el nuevo rol:", 
+            "Modificar Rol", 
+            javax.swing.JOptionPane.QUESTION_MESSAGE, 
+            null, 
+            roles, 
+            rolActual
+        );
 
-if (nuevoRol == null) {
-    return;
-}
+        if (nuevoRol == null) {
+            return;
+        }
 
-// 6. Ejecutar la actualización en la base de datos SQLite
-try (java.sql.Connection conn = Conexion.conectar();
-     java.sql.PreparedStatement pstmt = nuevaContraseña.equals("***") ? 
-         // Si la contraseña es "***", no la modificamos en la base de datos
-         conn.prepareStatement("UPDATE usuarios SET usuario = ?, rol = ? WHERE id = ?") :
-         // Si escribió una contraseña nueva, sí la actualizamos
-         conn.prepareStatement("UPDATE usuarios SET usuario = ?, contrasena = ?, rol = ? WHERE id = ?")) {
-    
-    pstmt.setString(1, nuevoUsuario.trim());
-    
-    if (nuevaContraseña.equals("***")) {
-        pstmt.setString(2, nuevoRol.toString().toUpperCase());
-        pstmt.setObject(3, idActual);
-    } else {
-        pstmt.setString(2, nuevaContraseña.trim());
-        pstmt.setString(3, nuevoRol.toString().toUpperCase());
-        pstmt.setObject(4, idActual);
-    }
-    
-    pstmt.executeUpdate();
+        try (java.sql.Connection conn = Conexion.conectar();
+             java.sql.PreparedStatement pstmt = nuevaContraseña.equals("***") ? 
+                 conn.prepareStatement("UPDATE usuarios SET usuario = ?, rol = ? WHERE id = ?") :
+                 conn.prepareStatement("UPDATE usuarios SET usuario = ?, contrasena = ?, rol = ? WHERE id = ?")) {
+            
+            pstmt.setString(1, nuevoUsuario.trim());
+            
+            if (nuevaContraseña.equals("***")) {
+                pstmt.setString(2, nuevoRol.toString().toUpperCase());
+                pstmt.setObject(3, idActual);
+            } else {
+                pstmt.setString(2, nuevaContraseña.trim());
+                pstmt.setString(3, nuevoRol.toString().toUpperCase());
+                pstmt.setObject(4, idActual);
+            }
+            
+            pstmt.executeUpdate();
 
-    // 7. Actualizar los datos en el modelo global de la tabla visual
-    jTable1.setValueAt(nuevoUsuario.trim(), filaSeleccionada, 1);
-    jTable1.setValueAt("***", filaSeleccionada, 2); // Mantiene la contraseña enmascarada
-    jTable1.setValueAt(nuevoRol.toString().toUpperCase(), filaSeleccionada, 3);
-    
-    javax.swing.JOptionPane.showMessageDialog(this, "¡Usuario actualizado exitosamente en la base de datos!", "Éxito", javax.swing.JOptionPane.INFORMATION_MESSAGE);
+            jTable1.setValueAt(nuevoUsuario.trim(), filaSeleccionada, 1);
+            jTable1.setValueAt("***", filaSeleccionada, 2);
+            jTable1.setValueAt(nuevoRol.toString().toUpperCase(), filaSeleccionada, 3);
+            
+            javax.swing.JOptionPane.showMessageDialog(this, "¡Usuario actualizado exitosamente en la base de datos!", "Éxito", javax.swing.JOptionPane.INFORMATION_MESSAGE);
 
-} catch (java.sql.SQLException ex) {
-    javax.swing.JOptionPane.showMessageDialog(this, "Error al actualizar el usuario en la base de datos (el nombre de usuario podría estar repetido): " + ex.getMessage(), "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
-}
+        } catch (java.sql.SQLException ex) {
+            javax.swing.JOptionPane.showMessageDialog(this, "Error al actualizar el usuario en la base de datos (el nombre de usuario podría estar repetido): " + ex.getMessage(), "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
+        }
     }//GEN-LAST:event_jButton4ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        // TODO add your handling code here:
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-   int filaSeleccionada = jTable1.getSelectedRow();
+        int filaSeleccionada = jTable1.getSelectedRow();
 
-// 1. Validar que realmente haya una fila seleccionada
-if (filaSeleccionada == -1) {
-    javax.swing.JOptionPane.showMessageDialog(this, "Por favor, seleccione un usuario de la tabla para eliminar.", "Advertencia", javax.swing.JOptionPane.WARNING_MESSAGE);
-    return;
-}
-
-int confirmar = javax.swing.JOptionPane.showConfirmDialog(this, "¿Está seguro de eliminar este usuario?", "Confirmar eliminación", javax.swing.JOptionPane.YES_NO_OPTION);
-
-if (confirmar == javax.swing.JOptionPane.YES_OPTION) {
-    try {
-        // 2. Obtener el ID del usuario desde la primera columna (índice 0)
-        Object idUsuario = jTable1.getValueAt(filaSeleccionada, 0);
-
-        // 3. Ejecutar el DELETE en la base de datos SQLite
-        try (java.sql.Connection conn = Conexion.conectar();
-             java.sql.PreparedStatement pstmt = conn.prepareStatement("DELETE FROM usuarios WHERE id = ?")) {
-            
-            pstmt.setObject(1, idUsuario);
-            pstmt.executeUpdate();
+        if (filaSeleccionada == -1) {
+            javax.swing.JOptionPane.showMessageDialog(this, "Por favor, seleccione un usuario de la tabla para eliminar.", "Advertencia", javax.swing.JOptionPane.WARNING_MESSAGE);
+            return;
         }
 
-        // 4. Obtener el modelo directamente del JTable para evitar conflictos de índices
-        javax.swing.table.DefaultTableModel modelo = (javax.swing.table.DefaultTableModel) jTable1.getModel();
-        
-        // Verificar que la fila esté dentro del rango actual del modelo antes de borrarla
-        if (filaSeleccionada < modelo.getRowCount()) {
-            modelo.removeRow(filaSeleccionada);
+        int confirmar = javax.swing.JOptionPane.showConfirmDialog(this, "¿Está seguro de eliminar este usuario?", "Confirmar eliminación", javax.swing.JOptionPane.YES_NO_OPTION);
+
+        if (confirmar == javax.swing.JOptionPane.YES_OPTION) {
+            try {
+                Object idUsuario = jTable1.getValueAt(filaSeleccionada, 0);
+
+                try (java.sql.Connection conn = Conexion.conectar();
+                     java.sql.PreparedStatement pstmt = conn.prepareStatement("DELETE FROM usuarios WHERE id = ?")) {
+                    
+                    pstmt.setObject(1, idUsuario);
+                    pstmt.executeUpdate();
+                }
+
+                javax.swing.table.DefaultTableModel modelo = (javax.swing.table.DefaultTableModel) jTable1.getModel();
+                
+                if (filaSeleccionada < modelo.getRowCount()) {
+                    modelo.removeRow(filaSeleccionada);
+                }
+                
+                javax.swing.JOptionPane.showMessageDialog(this, "¡Usuario eliminado exitosamente de la base de datos!", "Éxito", javax.swing.JOptionPane.INFORMATION_MESSAGE);
+                
+            } catch (Exception ex) {
+                javax.swing.JOptionPane.showMessageDialog(this, "Error al eliminar el usuario: " + ex.getMessage(), "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
+            }
         }
-        
-        javax.swing.JOptionPane.showMessageDialog(this, "¡Usuario eliminado exitosamente de la base de datos!", "Éxito", javax.swing.JOptionPane.INFORMATION_MESSAGE);
-        
-    } catch (Exception ex) {
-        javax.swing.JOptionPane.showMessageDialog(this, "Error al eliminar el usuario: " + ex.getMessage(), "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
-    }
-}
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
-
         this.dispose();
     }//GEN-LAST:event_jButton5ActionPerformed
 
-    /**
-     * @param args the command line arguments
-     */
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">

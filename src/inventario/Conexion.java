@@ -8,7 +8,7 @@ import javax.swing.JOptionPane;
 
 public class Conexion {
 
-    // Cambiamos la URL fija por una dinámica basada en la carpeta donde se ejecuta el programa (la USB o PC)
+    
     public static Connection conectar() {
         Connection conn = null;
         try {
